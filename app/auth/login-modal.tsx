@@ -1,4 +1,7 @@
+import Logo from "@/assets/images/Logo.svg";
+import { AppleIcon, EmailIcon, GoogleIcon, PhoneIcon } from "@/utils/SvgIcons";
 import { color, font } from "@/utils/constants";
+import { BlurView } from "expo-blur";
 import React from "react";
 import {
   Animated,
@@ -12,6 +15,15 @@ import {
 
 const { height } = Dimensions.get("window");
 
+interface LoginModalProps {
+  visible: boolean;
+  slideAnim: Animated.Value;
+  onClose: () => void;
+  onSwitchToCreateAccount: () => void;
+  onSwitchToLogin: () => void;
+  isLoginMode: boolean;
+}
+
 export default function LoginModal({
   visible,
   slideAnim,
@@ -19,7 +31,7 @@ export default function LoginModal({
   onSwitchToCreateAccount,
   onSwitchToLogin,
   isLoginMode,
-}) {
+}: LoginModalProps) {
   return (
     <Modal
       visible={visible}
@@ -28,92 +40,105 @@ export default function LoginModal({
       onRequestClose={onClose}
     >
       <View style={styles.modalOverlay}>
-        <Animated.View
-          style={[
-            styles.modalContainer,
-            {
-              transform: [{ translateY: slideAnim }],
-            },
-          ]}
-        >
-          {/* Modal Header */}
-          <View style={styles.modalHeader}>
-            <Text style={styles.modalTitle}>
-              {isLoginMode ? "Login" : "Create Account"}
-            </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>×</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Modal Content */}
-          <View style={styles.modalContent}>
-            {/* Logo and Tagline */}
-            <View style={styles.logoContainer}>
-              <Text style={styles.logoText}>locaidad</Text>
-              <Text style={styles.taglineText}>people. places. proof.</Text>
+        <BlurView intensity={20} style={styles.blurContainer}>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              {
+                transform: [{ translateY: slideAnim }],
+              },
+            ]}
+          >
+            {/* Modal Header */}
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>
+                {isLoginMode ? "Login" : "Create Account"}
+              </Text>
+              <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <Text style={styles.closeButtonText}>×</Text>
+              </TouchableOpacity>
             </View>
 
-            {/* Welcome Back */}
-            <View style={styles.welcomeBackContainer}>
-              <Text style={styles.welcomeBackTitle}>Welcome Back!</Text>
-              <Text style={styles.welcomeBackSubtitle}>
-                {isLoginMode
-                  ? "Login to continue sharing your local moments."
-                  : "Sign in to book unforgettable experiences and manage your upcoming sessions."}
+            {/* Modal Content */}
+            <View style={styles.modalContent}>
+              {/* Logo and Tagline */}
+              <View style={styles.logoContainer}>
+                <Logo />
+              </View>
+
+              {/* Welcome Back */}
+              <View style={styles.welcomeBackContainer}>
+                <Text style={styles.welcomeBackTitle}>Welcome Back!</Text>
+                <Text style={styles.welcomeBackSubtitle}>
+                  {isLoginMode
+                    ? "Login to continue sharing your local moments."
+                    : "Sign in to book unforgettable experiences and manage your upcoming sessions."}
+                </Text>
+              </View>
+
+              {/* Login Options */}
+              <View style={styles.loginOptionsContainer}>
+                <TouchableOpacity style={styles.loginOption}>
+                  {/* <Text style={styles.appleIcon}>🍎</Text> */}
+                  <AppleIcon />
+                  <Text style={styles.loginOptionText}>
+                    Continue with Apple
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.loginOption}>
+                  {/* <Text style={styles.googleIcon}>G</Text> */}
+                  <GoogleIcon />
+                  <Text style={styles.loginOptionText}>
+                    Continue with Google
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.loginOption}>
+                  {/* <Text style={styles.phoneIcon}>📱</Text> */}
+                  <PhoneIcon />
+                  <Text style={styles.loginOptionText}>
+                    Continue with Phone
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.emailLoginOption}>
+                  {/* <Text style={styles.emailIcon}>✉️</Text> */}
+                  <EmailIcon />
+                  <Text style={styles.emailLoginText}>Continue with Email</Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Switch Account Type */}
+              <View style={styles.createAccountContainer}>
+                <View style={styles.noAccountContainer}>
+                  <View style={styles.line}></View>
+                  <Text style={styles.noAccountText}>
+                    {isLoginMode
+                      ? "DON'T HAVE AN ACCOUNT?"
+                      : "HAVE AN ACCOUNT?"}
+                  </Text>
+                  <View style={styles.line}></View>
+                </View>
+                <TouchableOpacity
+                  style={styles.createAccountModalButton}
+                  onPress={
+                    isLoginMode ? onSwitchToCreateAccount : onSwitchToLogin
+                  }
+                >
+                  <Text style={styles.createAccountModalText}>
+                    {isLoginMode ? "Create account" : "Log in"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Terms */}
+              <Text style={styles.termsText}>
+                By continuing, you agree to our Terms & Privacy Policy
               </Text>
             </View>
-
-            {/* Login Options */}
-            <View style={styles.loginOptionsContainer}>
-              <TouchableOpacity style={styles.loginOption}>
-                <Text style={styles.appleIcon}>🍎</Text>
-                <Text style={styles.loginOptionText}>Continue with Apple</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.loginOption}>
-                <Text style={styles.googleIcon}>G</Text>
-                <Text style={styles.loginOptionText}>Continue with Google</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.loginOption}>
-                <Text style={styles.phoneIcon}>📱</Text>
-                <Text style={styles.loginOptionText}>Continue with Phone</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={styles.emailLoginOption}>
-                <Text style={styles.emailIcon}>✉️</Text>
-                <Text style={styles.emailLoginText}>Continue with Email</Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Switch Account Type */}
-            <View style={styles.createAccountContainer}>
-              <View style={styles.noAccountContainer}>
-                <View style={styles.line}></View>
-                <Text style={styles.noAccountText}>
-                  {isLoginMode ? "DON'T HAVE AN ACCOUNT?" : "HAVE AN ACCOUNT?"}
-                </Text>
-                <View style={styles.line}></View>
-              </View>
-              <TouchableOpacity
-                style={styles.createAccountModalButton}
-                onPress={
-                  isLoginMode ? onSwitchToCreateAccount : onSwitchToLogin
-                }
-              >
-                <Text style={styles.createAccountModalText}>
-                  {isLoginMode ? "Create account" : "Log in"}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
-            {/* Terms */}
-            <Text style={styles.termsText}>
-              By continuing, you agree to our Terms & Privacy Policy
-            </Text>
-          </View>
-        </Animated.View>
+          </Animated.View>
+        </BlurView>
       </View>
     </Modal>
   );
@@ -122,14 +147,17 @@ export default function LoginModal({
 const styles = StyleSheet.create({
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "flex-end",
+  },
+  blurContainer: {
+    flex: 1,
     justifyContent: "flex-end",
   },
   modalContainer: {
     backgroundColor: color.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    height: height * 0.9,
+    height: height * 0.95,
   },
   modalHeader: {
     flexDirection: "row",
@@ -158,23 +186,10 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     paddingHorizontal: 24,
-    paddingVertical: 18,
   },
   logoContainer: {
     alignItems: "center",
     marginVertical: 34,
-  },
-  logoText: {
-    fontSize: 32,
-    fontFamily: font.bold,
-    color: color.black,
-    marginBottom: 4,
-  },
-  taglineText: {
-    fontSize: 14,
-    color: color.gray400,
-    fontFamily: font.regular,
-    fontStyle: "italic",
   },
   welcomeBackContainer: {
     alignItems: "center",
@@ -187,6 +202,7 @@ const styles = StyleSheet.create({
   },
   welcomeBackSubtitle: {
     fontSize: 17,
+    lineHeight: 24,
     color: color.gray400,
     fontFamily: font.regular,
     textAlign: "center",
@@ -291,6 +307,5 @@ const styles = StyleSheet.create({
     fontFamily: font.regular,
     textAlign: "center",
     lineHeight: 18,
-    paddingHorizontal: 20,
   },
 });

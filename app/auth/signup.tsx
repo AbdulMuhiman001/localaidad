@@ -1,6 +1,6 @@
-import Logo from "@/assets/images/Logo.svg";
+import UserIcon from "@/assets/images/user.svg";
 import { color, font } from "@/utils/constants";
-import { AppleIcon, GoogleIcon, LockIcon, MailIcon } from "@/utils/SvgIcons";
+import { LockIcon, MailIcon, ProfileIcon } from "@/utils/SvgIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { router } from "expo-router";
@@ -17,37 +17,25 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function LoginScreen() {
+export default function SignUpScreen() {
+  const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
-    // Handle login logic
-    console.log("Login pressed");
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleForgotPassword = () => {
-    // Handle forgot password
-    console.log("Forgot password pressed");
-  };
-
-  const handleAppleLogin = () => {
-    // Handle Apple login
-    console.log("Apple login pressed");
-  };
-
-  const handleGoogleLogin = () => {
-    // Handle Google login
-    console.log("Google login pressed");
-  };
-
-  const handleCreateAccount = () => {
-    router.push("/auth/signup");
+  const handleContinue = () => {
+    // Handle signup logic
+    router.push("/auth/phoneNumber");
   };
 
   const handleBackPress = () => {
@@ -67,7 +55,7 @@ export default function LoginScreen() {
           <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
             <AntDesign name="arrowleft" size={24} color="black" />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Login with Email</Text>
+          <Text style={styles.headerTitle}>Create Account</Text>
           <View style={styles.headerSpacer} />
         </View>
 
@@ -77,21 +65,38 @@ export default function LoginScreen() {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Logo Section */}
-          <View style={styles.logoContainer}>
-            <Logo />
+          {/* Avatar Section */}
+          <View style={styles.avatarContainer}>
+            <UserIcon />
           </View>
 
           {/* Title Section */}
           <View style={styles.titleContainer}>
-            <Text style={styles.title}>Login to Your Account</Text>
+            <Text style={styles.title}>Create an Account</Text>
             <Text style={styles.subtitle}>
-              Login to continue sharing your local moments.
+              Join Locaided and start earning for what you see.
             </Text>
           </View>
 
           {/* Form Section */}
           <View style={styles.formContainer}>
+            {/* Full Name Input */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Full Name</Text>
+              <View style={styles.inputWrapper}>
+                <ProfileIcon />
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="Enter your full name"
+                  placeholderTextColor={color.gray300}
+                  value={fullName}
+                  onChangeText={setFullName}
+                  autoCapitalize="words"
+                  autoCorrect={false}
+                />
+              </View>
+            </View>
+
             {/* Email Input */}
             <View style={styles.inputContainer}>
               <Text style={styles.inputLabel}>Email address</Text>
@@ -112,12 +117,7 @@ export default function LoginScreen() {
 
             {/* Password Input */}
             <View style={styles.inputContainer}>
-              <View style={styles.passwordLabelContainer}>
-                <Text style={styles.inputLabel}>Password</Text>
-                <TouchableOpacity onPress={handleForgotPassword}>
-                  <Text style={styles.forgotPasswordText}>Forgot password</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.inputLabel}>Password</Text>
               <View style={styles.inputWrapper}>
                 <LockIcon />
                 <TextInput
@@ -134,58 +134,59 @@ export default function LoginScreen() {
                   onPress={togglePasswordVisibility}
                   style={styles.eyeIcon}
                 >
-                  <Text>
-                    {showPassword ? (
-                      <Feather name="eye-off" size={20} color={color.gray300} />
-                    ) : (
-                      <Feather name="eye" size={20} color={color.gray300} />
-                    )}
-                  </Text>
+                  <Feather
+                    name={showPassword ? "eye-off" : "eye"}
+                    size={20}
+                    color={color.gray300}
+                  />
                 </TouchableOpacity>
               </View>
             </View>
 
-            {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Login</Text>
-            </TouchableOpacity>
-
-            {/* OR Divider */}
-            <View style={styles.dividerContainer}>
-              <View style={styles.dividerLine} />
-              <Text style={styles.dividerText}>OR</Text>
-              <View style={styles.dividerLine} />
+            {/* Confirm Password Input */}
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputLabel}>Confirm Password</Text>
+              <View style={styles.inputWrapper}>
+                <LockIcon />
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="••••••••••"
+                  placeholderTextColor={color.gray300}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  secureTextEntry={!showConfirmPassword}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                />
+                <TouchableOpacity
+                  onPress={toggleConfirmPasswordVisibility}
+                  style={styles.eyeIcon}
+                >
+                  <Feather
+                    name={showConfirmPassword ? "eye-off" : "eye"}
+                    size={20}
+                    color={color.gray300}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
 
-            {/* Social Login Buttons */}
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={handleAppleLogin}
-            >
-              <AppleIcon />
-              <Text style={styles.socialButtonText}>Continue with Apple</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={handleGoogleLogin}
-            >
-              <GoogleIcon />
-              <Text style={styles.socialButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
-            {/* Create Account Section */}
-            <View style={styles.createAccountContainer}>
-              <Text style={styles.noAccountText}>DON'T HAVE AN ACCOUNT?</Text>
-              <TouchableOpacity
-                style={styles.createAccountButton}
-                onPress={handleCreateAccount}
-              >
-                <Text style={styles.createAccountButtonText}>
-                  Create account
-                </Text>
-              </TouchableOpacity>
+            {/* Terms and Privacy Policy */}
+            <View style={styles.termsContainer}>
+              <Text style={styles.termsText}>
+                By continuing, you agree to our{" "}
+                <Text style={styles.linkText}>Terms</Text> &{" "}
+                <Text style={styles.linkText}>Privacy Policy</Text>
+              </Text>
             </View>
+
+            {/* Continue Button */}
+            <TouchableOpacity
+              style={styles.continueButton}
+              onPress={handleContinue}
+            >
+              <Text style={styles.continueButtonText}>Continue</Text>
+            </TouchableOpacity>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -231,25 +232,27 @@ const styles = StyleSheet.create({
   headerSpacer: {
     width: 40,
   },
-  logoContainer: {
+  avatarContainer: {
     alignItems: "center",
-    paddingVertical: 10,
+    marginVertical: 10,
   },
   titleContainer: {
     alignItems: "center",
     paddingHorizontal: 20,
-    marginBottom: 24,
+    marginBottom: 32,
   },
   title: {
     fontSize: 24,
     fontFamily: font.semiBold,
     marginBottom: 8,
+    color: color.black,
   },
   subtitle: {
     fontSize: 16,
     color: color.gray400,
     fontFamily: font.regular,
     textAlign: "center",
+    lineHeight: 22,
   },
   formContainer: {
     paddingHorizontal: 20,
@@ -264,18 +267,6 @@ const styles = StyleSheet.create({
     color: color.black,
     marginBottom: 4,
   },
-  passwordLabelContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 4,
-  },
-  forgotPasswordText: {
-    fontSize: 14,
-    color: color.gray400,
-    fontFamily: font.medium,
-    textDecorationLine: "underline",
-  },
   inputWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -284,89 +275,43 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     borderWidth: 1,
     borderColor: color.gray200,
+    backgroundColor: color.white,
   },
-
   textInput: {
     flex: 1,
     fontSize: 16,
     fontFamily: font.regular,
     color: color.black,
-    paddingLeft: 6,
+    paddingLeft: 10,
   },
   eyeIcon: {
     padding: 4,
   },
-  loginButton: {
+  termsContainer: {
+    marginBottom: 32,
+    alignItems: "center",
+  },
+  termsText: {
+    fontSize: 14,
+    color: color.gray400,
+    fontFamily: font.regular,
+    textAlign: "center",
+    lineHeight: 20,
+  },
+  linkText: {
+    color: color.black,
+    fontFamily: font.medium,
+  },
+  continueButton: {
     backgroundColor: color.black,
     borderRadius: 16,
     paddingVertical: 18,
     alignItems: "center",
-    marginTop: 10,
-    marginBottom: 22,
+    marginBottom: 20,
   },
-  loginButtonText: {
+  continueButtonText: {
     fontSize: 16,
     fontFamily: font.semiBold,
     color: color.white,
-  },
-  dividerContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 14,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: color.gray200,
-  },
-  dividerText: {
-    fontSize: 14,
-    color: color.gray400,
-    fontFamily: font.regular,
-    marginHorizontal: 16,
-  },
-  socialButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: color.gray200,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
-  socialButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.black,
-    marginLeft: 12,
-  },
-  createAccountContainer: {
-    alignItems: "center",
-    marginTop: 10,
-  },
-  noAccountText: {
-    fontSize: 12,
-    color: color.gray400,
-    fontFamily: font.regular,
-    marginBottom: 16,
-    letterSpacing: 0.5,
-  },
-  createAccountButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: color.gray200,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    width: "100%",
-  },
-  createAccountButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.black,
-    textAlign: "center",
   },
 });

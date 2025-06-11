@@ -2,10 +2,10 @@ export const color = {
   primary: "#FF2557",
 
   white: "#FFFFFF",
-  black: "#000",
+  black: "#0E121B",
   gray100: "#DFDFDF",
   gray200: "#E1E4EA",
-  gray300: "#8C8C8C",
+  gray300: "#99A0AE",
   gray400: "#525866",
 };
 

@@ -61,7 +61,7 @@ export default function Splash() {
       <Animated.View style={[styles.imageContainer, animatedContainerStyle]}>
         <Animated.Image
           style={[styles.image, animatedImageStyle]}
-          source={require("../assets/images/splash.png")}
+          source={require("../assets/images/Logo.png")}
         />
       </Animated.View>
       <Animated.Text style={[styles.appName, animatedTextStyle]}>
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   imageContainer: {
-    height: 120,
-    width: 120,
+    height: 130,
+    width: 130,
   },
   image: {
     width: "100%",

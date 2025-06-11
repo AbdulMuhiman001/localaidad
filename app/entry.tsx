@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   Animated,
   Dimensions,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -11,9 +12,9 @@ import {
 } from "react-native";
 import LoginModal from "./auth/login-modal";
 
-const { width, height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
-export default function WelcomeScreen() {
+export default function Entry() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loginModalVisible, setLoginModalVisible] = useState(false);
   const [createAccountModalVisible, setCreateAccountModalVisible] =
@@ -49,7 +50,7 @@ export default function WelcomeScreen() {
     },
   ];
 
-  const handleImageIndicatorPress = (index) => {
+  const handleImageIndicatorPress = (index: number) => {
     setCurrentImageIndex(index);
   };
 
@@ -76,20 +77,19 @@ export default function WelcomeScreen() {
   };
 
   const hideModal = () => {
+    setLoginModalVisible(false);
+    setCreateAccountModalVisible(false);
     Animated.spring(slideAnim, {
       toValue: height,
       useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start(() => {
-      setLoginModalVisible(false);
-      setCreateAccountModalVisible(false);
-    });
+      tension: 10,
+      friction: 10,
+    }).start();
   };
 
   const switchToCreateAccount = () => {
     setLoginModalVisible(false);
-    setCreateAccountModalVisible(true);
+    router.push("/auth/signup");
   };
 
   const switchToLogin = () => {
@@ -100,15 +100,14 @@ export default function WelcomeScreen() {
   const isModalVisible = loginModalVisible || createAccountModalVisible;
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require("@/assets/images/entry.png")}
+      style={styles.container}
+      resizeMode="cover"
+    >
       {/* Main Content */}
       <View style={[styles.mainContent, isModalVisible && styles.blurred]}>
-        {/* Main Image/Content Area */}
-        <View style={styles.imageContainer}>
-          <View style={styles.phoneFrame}>{/* Placeholder for image */}</View>
-        </View>
-
-        {/* Welcome Content */}
+        {/* Welcome Content - positioned at bottom */}
         <View style={styles.contentContainer}>
           <Text style={styles.title}>
             {welcomeContent[currentImageIndex].title}
@@ -154,6 +153,7 @@ export default function WelcomeScreen() {
         slideAnim={slideAnim}
         onClose={hideModal}
         onSwitchToCreateAccount={switchToCreateAccount}
+        onSwitchToLogin={switchToLogin}
         isLoginMode={true}
       />
 
@@ -162,59 +162,41 @@ export default function WelcomeScreen() {
         visible={createAccountModalVisible}
         slideAnim={slideAnim}
         onClose={hideModal}
+        onSwitchToCreateAccount={switchToCreateAccount}
         onSwitchToLogin={switchToLogin}
         isLoginMode={false}
       />
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
+    marginTop: 60,
   },
   mainContent: {
     flex: 1,
+    justifyContent: "flex-end",
     paddingHorizontal: 20,
-    paddingTop: 40,
     paddingBottom: 20,
   },
   blurred: {
-    opacity: 0.3,
-  },
-  imageContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 20,
-  },
-  phoneFrame: {
-    width: width * 0.75,
-    height: width * 0.75 * 1.8,
-    backgroundColor: "#fff",
-    borderRadius: 25,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.15,
-    shadowRadius: 20,
-    elevation: 15,
-    overflow: "hidden",
-    borderWidth: 8,
-    borderColor: "#f0f0f0",
+    opacity: 0.9,
   },
   contentContainer: {
     paddingVertical: 30,
     alignItems: "center",
+    borderRadius: 20,
+    marginBottom: 20,
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 26,
     fontFamily: font.semiBold,
     textAlign: "center",
     marginBottom: 6,
+    color: color.black,
   },
   subtitle: {
     fontSize: 16,
