@@ -1,16 +1,23 @@
+import CustomButton from "@/components/customButton";
 import { color, font } from "@/utils/constants";
 import { router } from "expo-router";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Animated,
   Dimensions,
   ImageBackground,
+  LogBox,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
 import LoginModal from "./auth/login-modal";
+
+// Suppress the specific error message in the app UI
+LogBox.ignoreLogs([
+  'Text strings must be rendered within a <Text> component',
+]);
 
 const { height } = Dimensions.get("window");
 
@@ -88,16 +95,23 @@ export default function Entry() {
   };
 
   const switchToCreateAccount = () => {
+    setCreateAccountModalVisible(false);
     setLoginModalVisible(false);
     router.push("/auth/signup");
   };
 
   const switchToLogin = () => {
     setCreateAccountModalVisible(false);
+    setLoginModalVisible(false);
     router.push("/auth/login");
   };
 
-  const isModalVisible = loginModalVisible || createAccountModalVisible;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % welcomeContent.length);
+    }, 2000); // 5 seconds
+    return () => clearInterval(interval);
+  }, [welcomeContent.length]);
 
   return (
     <ImageBackground
@@ -106,7 +120,7 @@ export default function Entry() {
       resizeMode="cover"
     >
       {/* Main Content */}
-      <View style={[styles.mainContent, isModalVisible && styles.blurred]}>
+      <View style={styles.mainContent}>
         {/* Welcome Content - positioned at bottom */}
         <View style={styles.contentContainer}>
           <Text style={styles.title}>
@@ -117,7 +131,6 @@ export default function Entry() {
             {welcomeContent[currentImageIndex].subtitle}
           </Text>
 
-          {/* Image Indicators */}
           <View style={styles.indicatorContainer}>
             {welcomeContent.map((_, index) => (
               <TouchableOpacity
@@ -134,16 +147,15 @@ export default function Entry() {
 
         {/* Action Buttons */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            style={styles.createAccountButton}
+          <CustomButton
+            title="Create Account"
             onPress={showCreateAccountModal}
-          >
-            <Text style={styles.createAccountText}>Create Account</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.loginButton} onPress={showLoginModal}>
-            <Text style={styles.loginText}>Login</Text>
-          </TouchableOpacity>
+          />
+          <CustomButton
+            title="Login"
+            onPress={showLoginModal}
+            variant="secondary"
+          />
         </View>
       </View>
 
@@ -155,6 +167,8 @@ export default function Entry() {
         onSwitchToCreateAccount={switchToCreateAccount}
         onSwitchToLogin={switchToLogin}
         isLoginMode={true}
+        handleAppleLogin={() => console.log("Apple login")}
+        handleGoogleLogin={() => console.log("Google login")}
       />
 
       {/* Create Account Modal */}
@@ -165,6 +179,8 @@ export default function Entry() {
         onSwitchToCreateAccount={switchToCreateAccount}
         onSwitchToLogin={switchToLogin}
         isLoginMode={false}
+        handleAppleLogin={() => console.log("Apple login")}
+        handleGoogleLogin={() => console.log("Google login")}
       />
     </ImageBackground>
   );
@@ -173,81 +189,49 @@ export default function Entry() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 60,
+    marginTop: 90,
   },
   mainContent: {
     flex: 1,
     justifyContent: "flex-end",
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 20,
   },
-  blurred: {
-    opacity: 0.9,
-  },
   contentContainer: {
-    paddingVertical: 30,
-    alignItems: "center",
-    borderRadius: 20,
-    marginBottom: 20,
-    paddingHorizontal: 20,
+    marginBottom: 24,
   },
   title: {
     fontSize: 26,
     fontFamily: font.semiBold,
     textAlign: "center",
     marginBottom: 6,
-    color: color.black,
   },
   subtitle: {
     fontSize: 16,
     color: color.gray400,
     textAlign: "center",
     lineHeight: 24,
-    paddingHorizontal: 10,
-    marginBottom: 30,
-    fontFamily: font.regular,
+    marginBottom: 24,
+    fontFamily: font.medium,
   },
   indicatorContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    gap: 8,
   },
   indicator: {
     width: 36,
     height: 8,
     borderRadius: 4,
     backgroundColor: color.gray200,
-    marginHorizontal: 4,
   },
   activeIndicator: {
     backgroundColor: color.primary,
     width: 36,
   },
   buttonContainer: {
+    gap: 12,
     paddingBottom: 20,
-  },
-  createAccountButton: {
-    backgroundColor: color.black,
-    paddingVertical: 18,
-    borderRadius: 16,
-    marginBottom: 12,
-  },
-  createAccountText: {
-    color: color.white,
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    textAlign: "center",
-  },
-  loginButton: {
-    backgroundColor: "transparent",
-    paddingVertical: 18,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: color.gray200,
-  },
-  loginText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    textAlign: "center",
   },
 });

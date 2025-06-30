@@ -1,6 +1,7 @@
-import UserIcon from "@/assets/images/profileTransperant.svg";
+import Coin from "@/assets/images/coin.svg";
+import UserIcon from "@/assets/images/default.svg";
+import Header from "@/components/header";
 import { color, font } from "@/utils/constants";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
 import React, { useState } from "react";
 import {
@@ -117,14 +118,7 @@ export default function AvatarScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-          <AntDesign name="arrowleft" size={24} color="black" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Choose an Avatar</Text>
-        <View style={styles.headerSpacer} />
-      </View>
+      <Header title="Choose an Avatar" />
 
       <View style={styles.content}>
         {/* Avatar Section */}
@@ -136,9 +130,7 @@ export default function AvatarScreen() {
                 style={styles.avatarImage}
               />
             ) : (
-              <View style={styles.avatarPlaceholder}>
-                <UserIcon color={color.gray300} size={60} />
-              </View>
+              <UserIcon />
             )}
           </View>
         </View>
@@ -165,31 +157,14 @@ export default function AvatarScreen() {
 
         {/* Complete Button */}
         <TouchableOpacity
-          style={[
-            styles.completeButton,
-            !isImageSelected && styles.completeButtonDisabled,
-          ]}
+          style={[styles.completeButton]}
           onPress={handleComplete}
           disabled={!isImageSelected}
         >
-          <Text
-            style={[
-              styles.completeButtonText,
-              !isImageSelected && styles.completeButtonTextDisabled,
-            ]}
-          >
-            Complete and earn
-          </Text>
+          <Text style={[styles.completeButtonText]}>Complete and earn</Text>
           <View style={styles.pointsBadge}>
-            <Text style={styles.coinIcon}>🪙</Text>
-            <Text
-              style={[
-                styles.pointsText,
-                !isImageSelected && styles.pointsTextDisabled,
-              ]}
-            >
-              +25 Points
-            </Text>
+            <Coin />
+            <Text style={[styles.pointsText]}>+25 Points</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -231,19 +206,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 80,
   },
   avatarContainer: {
     alignItems: "center",
     marginBottom: 40,
   },
   avatarCircle: {
-    width: 160,
-    height: 160,
-    borderRadius: 80,
-    backgroundColor: color.gray100,
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
+    // width: 160,
+    // height: 160,
+    // borderRadius: 80,
+    // backgroundColor: color.gray100,
+    // justifyContent: "center",
+    // alignItems: "center",
+    // overflow: "hidden",
   },
   avatarImage: {
     width: 160,
@@ -293,13 +269,13 @@ const styles = StyleSheet.create({
   },
   laterText: {
     fontSize: 14,
-    fontFamily: font.regular,
+    fontFamily: font.medium,
     color: color.gray400,
     textDecorationLine: "underline",
   },
   completeButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
     backgroundColor: color.black,
     paddingVertical: 18,
@@ -308,6 +284,7 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     marginBottom: 20,
     width: "100%",
+    gap: 4,
   },
   completeButtonDisabled: {
     backgroundColor: color.gray200,

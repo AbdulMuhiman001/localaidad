@@ -1,7 +1,8 @@
 import Logo from "@/assets/images/Logo.svg";
+import CustomButton from "@/components/customButton";
+import Header from "@/components/header";
 import { color, font } from "@/utils/constants";
 import { AppleIcon, GoogleIcon, LockIcon, MailIcon } from "@/utils/SvgIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -29,6 +30,7 @@ export default function LoginScreen() {
   const handleLogin = () => {
     // Handle login logic
     console.log("Login pressed");
+    router.push("/auth/location");
   };
 
   const handleForgotPassword = () => {
@@ -50,11 +52,6 @@ export default function LoginScreen() {
     router.push("/auth/signup");
   };
 
-  const handleBackPress = () => {
-    // Handle back navigation
-    console.log("Back pressed");
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -63,13 +60,7 @@ export default function LoginScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
         {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-            <AntDesign name="arrowleft" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Login with Email</Text>
-          <View style={styles.headerSpacer} />
-        </View>
+        <Header title="Login with Email" />
 
         <ScrollView
           style={styles.scrollView}
@@ -146,9 +137,7 @@ export default function LoginScreen() {
             </View>
 
             {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-              <Text style={styles.loginButtonText}>Login</Text>
-            </TouchableOpacity>
+            <CustomButton title="Login" onPress={handleLogin} />
 
             {/* OR Divider */}
             <View style={styles.dividerContainer}>
@@ -157,35 +146,36 @@ export default function LoginScreen() {
               <View style={styles.dividerLine} />
             </View>
 
-            {/* Social Login Buttons */}
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={handleAppleLogin}
-            >
-              <AppleIcon />
-              <Text style={styles.socialButtonText}>Continue with Apple</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={handleGoogleLogin}
-            >
-              <GoogleIcon />
-              <Text style={styles.socialButtonText}>Continue with Google</Text>
-            </TouchableOpacity>
-
-            {/* Create Account Section */}
-            <View style={styles.createAccountContainer}>
-              <Text style={styles.noAccountText}>DON'T HAVE AN ACCOUNT?</Text>
-              <TouchableOpacity
-                style={styles.createAccountButton}
-                onPress={handleCreateAccount}
-              >
-                <Text style={styles.createAccountButtonText}>
-                  Create account
-                </Text>
-              </TouchableOpacity>
+            <View style={styles.socialButtons}>
+              <CustomButton
+                title="Continue with Google"
+                onPress={handleAppleLogin}
+                variant="secondary"
+                icon={<AppleIcon />}
+                iconPosition="left"
+              />
+              <CustomButton
+                title="Continue with Google"
+                onPress={handleGoogleLogin}
+                variant="secondary"
+                icon={<GoogleIcon />}
+                iconPosition="left"
+              />
             </View>
+
+            <View style={styles.noAccountContainer}>
+              <View style={styles.dividerLine}></View>
+              <Text style={styles.noAccountText}>
+                {" DON'T HAVE AN ACCOUNT?"}
+              </Text>
+              <View style={styles.dividerLine}></View>
+            </View>
+            <CustomButton
+              title="Create Account"
+              onPress={handleCreateAccount}
+              fullWidth
+              variant="secondary"
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -207,29 +197,6 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingVertical: 20,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: color.gray200,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontFamily: font.regular,
-    textAlign: "center",
-  },
-  headerSpacer: {
-    width: 40,
   },
   logoContainer: {
     alignItems: "center",
@@ -262,7 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: font.regular,
     color: color.black,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   passwordLabelContainer: {
     flexDirection: "row",
@@ -296,23 +263,10 @@ const styles = StyleSheet.create({
   eyeIcon: {
     padding: 4,
   },
-  loginButton: {
-    backgroundColor: color.black,
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: "center",
-    marginTop: 10,
-    marginBottom: 22,
-  },
-  loginButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.white,
-  },
   dividerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 14,
+    marginVertical: 16,
   },
   dividerLine: {
     flex: 1,
@@ -325,48 +279,21 @@ const styles = StyleSheet.create({
     fontFamily: font.regular,
     marginHorizontal: 16,
   },
-  socialButton: {
+  socialButtons: {
+    gap: 12,
+    marginBottom: 8,
+  },
+  noAccountContainer: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: color.gray200,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    marginBottom: 12,
-  },
-  socialButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.black,
-    marginLeft: 12,
-  },
-  createAccountContainer: {
     alignItems: "center",
-    marginTop: 10,
+    gap: 10,
+    marginVertical: 16,
   },
   noAccountText: {
     fontSize: 12,
     color: color.gray400,
     fontFamily: font.regular,
-    marginBottom: 16,
     letterSpacing: 0.5,
-  },
-  createAccountButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: color.gray200,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    width: "100%",
-  },
-  createAccountButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.black,
-    textAlign: "center",
   },
 });

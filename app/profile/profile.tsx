@@ -1,3 +1,6 @@
+import Coin from "@/assets/images/coin.svg";
+import Profile from "@/assets/images/profileTransperant.svg";
+import Header from "@/components/header";
 import { color, font } from "@/utils/constants";
 import { ProfileIcon } from "@/utils/SvgIcons";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -15,6 +18,7 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { router } from "expo-router";
 
 export default function PersonalInformationScreen() {
   const [firstName, setFirstName] = useState("John");
@@ -41,22 +45,23 @@ export default function PersonalInformationScreen() {
       dateOfBirth,
       gender,
     });
+    router.push("/home/feed");
   };
 
-  const handleUsernameChange = (text) => {
+  const handleUsernameChange = (text: string) => {
     setUsername(text);
     // Simulate username availability check
     setIsUsernameAvailable(text.length > 3);
   };
 
-  const handleDateChange = (event, selectedDate) => {
+  const handleDateChange = (event: any, selectedDate: any) => {
     setShowDatePicker(false);
     if (selectedDate) {
       setDateOfBirth(selectedDate);
     }
   };
 
-  const formatDate = (date) => {
+  const formatDate = (date: any) => {
     const options = { year: "numeric", month: "short", day: "numeric" };
     return date.toLocaleDateString("en-US", options);
   };
@@ -73,13 +78,14 @@ export default function PersonalInformationScreen() {
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
           <AntDesign name="arrowleft" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Personal Information</Text>
         <View style={styles.headerSpacer} />
-      </View>
+      </View> */}
+      <Header title="Personal Information" />
 
       <ScrollView
         style={styles.scrollView}
@@ -89,9 +95,7 @@ export default function PersonalInformationScreen() {
       >
         {/* Profile Icon Section */}
         <View style={styles.iconContainer}>
-          <View style={styles.iconCircle}>
-            <ProfileIcon color="#FF4444" size={32} />
-          </View>
+          <Profile />
         </View>
 
         {/* Title Section */}
@@ -108,7 +112,7 @@ export default function PersonalInformationScreen() {
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>First Name</Text>
             <View style={styles.inputWrapper}>
-              <ProfileIcon color={color.gray400} size={20} />
+              <ProfileIcon />
               <TextInput
                 style={styles.textInput}
                 value={firstName}
@@ -123,7 +127,7 @@ export default function PersonalInformationScreen() {
           <View style={styles.inputContainer}>
             <Text style={styles.inputLabel}>Last Name</Text>
             <View style={styles.inputWrapper}>
-              <ProfileIcon color={color.gray400} size={20} />
+              <ProfileIcon />
               <TextInput
                 style={styles.textInput}
                 value={lastName}
@@ -201,7 +205,7 @@ export default function PersonalInformationScreen() {
         >
           <Text style={styles.completeButtonText}>Complete and earn</Text>
           <View style={styles.pointsBadge}>
-            <Text style={styles.coinIcon}>🪙</Text>
+            <Coin />
             <Text style={styles.pointsText}>+50 Points</Text>
           </View>
         </TouchableOpacity>

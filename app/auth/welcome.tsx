@@ -1,11 +1,10 @@
 import AccountIcon from "@/assets/images/account.svg";
-import UserIcon from "@/assets/images/user.svg";
+import Avatar from "@/assets/images/Avatar.svg";
+import Coin from "@/assets/images/coin.svg";
 import { color, font } from "@/utils/constants";
-import { PhoneIcon, ProfileIcon } from "@/utils/SvgIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { Account, PhoneIcon, Tick } from "@/utils/SvgIcons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { router } from "expo-router";
-import React from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -14,6 +13,14 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+
+// Defensive utility to wrap any string or number in <Text>
+function SafeText({ children, style }) {
+  if (typeof children === 'string' || typeof children === 'number') {
+    return <Text style={style}>{children}</Text>;
+  }
+  return children;
+}
 
 export default function Welcome() {
   const handlePersonalInfo = () => {
@@ -36,7 +43,7 @@ export default function Welcome() {
       id: 1,
       title: "Locaided Account",
       description: "You've successfully signed up.",
-      icon: <ProfileIcon />,
+      icon: <Account />,
       isCompleted: true,
       points: 25,
       onPress: null,
@@ -54,7 +61,7 @@ export default function Welcome() {
       id: 3,
       title: "Choose an Avatar",
       description: "Pick a character that represents you.",
-      icon: <UserIcon />,
+      icon: <Avatar />,
       isCompleted: false,
       points: 25,
       onPress: handleChooseAvatar,
@@ -86,8 +93,9 @@ export default function Welcome() {
         <View style={styles.titleContainer}>
           <Text style={styles.title}>Your Account is Ready</Text>
           <Text style={styles.subtitle}>
-            Let's complete your profile to unlock all features and start earning
-            Social Score.
+            {
+              "Let's complete your profile to unlock all features and start earning Social Score."
+            }
           </Text>
         </View>
 
@@ -102,42 +110,49 @@ export default function Welcome() {
                 index === setupSteps.length - 1 && styles.lastCard,
               ]}
             >
-              {/* Icon */}
-              <View style={styles.stepIconContainer}>{step.icon}</View>
-
-              {/* Content */}
-              <View style={styles.stepContent}>
-                <Text style={styles.stepTitle}>{step.title}</Text>
-                <Text style={styles.stepDescription}>{step.description}</Text>
-
-                {/* Action Section */}
-                {step.isCompleted ? (
-                  <View style={styles.completedSection}>
-                    <View style={styles.pointsContainer}>
-                      <Text style={styles.coinIcon}>🪙</Text>
-                      <Text style={styles.pointsText}>
-                        +{step.points} Points
+              <View style={styles.innerContainer}>
+                {/* Icon */}
+                <View style={styles.stepIconContainer}>
+                  {typeof step.icon === 'string' ? <Text>{step.icon}</Text> : step.icon}
+                </View>
+                {/* Content */}
+                <View style={styles.stepContent}>
+                  <View style={styles.stepContainer}>
+                    <View>
+                      <View style={styles.headerConatiner}>
+                        <Text style={styles.stepTitle}>{step.title}</Text>{" "}
+                        {step.isCompleted && (
+                          <View style={styles.pointsContainer}>
+                            <Coin />
+                            <Text style={styles.pointsText}>
+                              +{step.points} Points
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                      <Text style={styles.stepDescription}>
+                        {step.description}
                       </Text>
                     </View>
-                    <View style={styles.checkmarkContainer}>
-                      <AntDesign name="check" size={20} color="#4CAF50" />
-                    </View>
+                    {step.isCompleted && <Tick />}
                   </View>
-                ) : (
-                  <TouchableOpacity
-                    style={styles.continueButton}
-                    onPress={step.onPress || undefined}
-                  >
-                    <Text style={styles.continueText}>Continue</Text>
-                    <View style={styles.pointsBadge}>
-                      <Text style={styles.coinIconSmall}>🪙</Text>
-                      <Text style={styles.pointsBadgeText}>
-                        {step.points} Points
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
+                </View>
               </View>
+              {/* Action Section */}
+              {!step.isCompleted && (
+                <TouchableOpacity
+                  style={styles.continueButton}
+                  onPress={step.onPress || undefined}
+                >
+                  <Text style={styles.continueText}>Continue</Text>
+                  <View style={styles.pointsBadge}>
+                    <Coin />
+                    <Text style={styles.pointsBadgeText}>
+                      {step.points} Points
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
             </View>
           ))}
         </View>
@@ -224,17 +239,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   stepCard: {
-    flexDirection: "row",
-    padding: 20,
+    // flexDirection: "row",
+    padding: 16,
     borderRadius: 16,
     borderWidth: 1,
     borderColor: color.gray200,
     marginBottom: 16,
     backgroundColor: color.white,
   },
+  innerContainer: {
+    flexDirection: "row",
+    // backgroundColor: color.white,
+  },
   completedCard: {
-    borderColor: "#4CAF50",
-    backgroundColor: "#F8FFF8",
+    borderColor: color.primary,
   },
   lastCard: {
     marginBottom: 0,
@@ -242,7 +260,7 @@ const styles = StyleSheet.create({
   stepIconContainer: {
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius: 12,
     backgroundColor: color.gray100,
     justifyContent: "center",
     alignItems: "center",
@@ -251,10 +269,19 @@ const styles = StyleSheet.create({
   stepContent: {
     flex: 1,
   },
+  stepContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  headerConatiner: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
   stepTitle: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: font.semiBold,
-    color: color.black,
     marginBottom: 4,
   },
   stepDescription: {
@@ -279,8 +306,8 @@ const styles = StyleSheet.create({
   },
   pointsText: {
     fontSize: 14,
-    fontFamily: font.medium,
-    color: "#FF4444",
+    fontFamily: font.semiBold,
+    color: color.primary,
   },
   checkmarkContainer: {
     width: 32,
@@ -292,12 +319,15 @@ const styles = StyleSheet.create({
   },
   continueButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: color.gray100,
+    // backgroundColor: color.gray100,
+    borderWidth: 1,
+    borderColor: color.gray200,
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 12,
+    marginTop: 8,
   },
   continueText: {
     fontSize: 14,

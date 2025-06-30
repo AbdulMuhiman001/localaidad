@@ -1,7 +1,8 @@
 import UserIcon from "@/assets/images/user.svg";
+import CustomButton from "@/components/customButton";
+import Header from "@/components/header";
 import { color, font } from "@/utils/constants";
 import { LockIcon, MailIcon, ProfileIcon } from "@/utils/SvgIcons";
-import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -38,11 +39,6 @@ export default function SignUpScreen() {
     router.push("/auth/phoneNumber");
   };
 
-  const handleBackPress = () => {
-    // Handle back navigation
-    console.log("Back pressed");
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -50,14 +46,7 @@ export default function SignUpScreen() {
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
-            <AntDesign name="arrowleft" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Create Account</Text>
-          <View style={styles.headerSpacer} />
-        </View>
+        <Header title="Create Account" />
 
         <ScrollView
           style={styles.scrollView}
@@ -174,19 +163,11 @@ export default function SignUpScreen() {
             {/* Terms and Privacy Policy */}
             <View style={styles.termsContainer}>
               <Text style={styles.termsText}>
-                By continuing, you agree to our{" "}
-                <Text style={styles.linkText}>Terms</Text> &{" "}
-                <Text style={styles.linkText}>Privacy Policy</Text>
+                By continuing, you agree to our Terms & Privacy Policy
               </Text>
             </View>
 
-            {/* Continue Button */}
-            <TouchableOpacity
-              style={styles.continueButton}
-              onPress={handleContinue}
-            >
-              <Text style={styles.continueButtonText}>Continue</Text>
-            </TouchableOpacity>
+            <CustomButton title="Continue" onPress={handleContinue} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -209,43 +190,18 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingVertical: 20,
   },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 24,
-    paddingVertical: 18,
-    borderBottomWidth: 1,
-    borderBottomColor: color.gray200,
-  },
-  backButton: {
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontFamily: font.regular,
-    textAlign: "center",
-  },
-  headerSpacer: {
-    width: 40,
-  },
   avatarContainer: {
     alignItems: "center",
-    marginVertical: 10,
+    marginVertical: 12,
   },
   titleContainer: {
     alignItems: "center",
-    paddingHorizontal: 20,
     marginBottom: 32,
   },
   title: {
     fontSize: 24,
-    fontFamily: font.semiBold,
     marginBottom: 8,
-    color: color.black,
+    fontFamily: font.semiBold,
   },
   subtitle: {
     fontSize: 16,
@@ -255,7 +211,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   formContainer: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     flex: 1,
   },
   inputContainer: {
@@ -265,7 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: font.regular,
     color: color.black,
-    marginBottom: 4,
+    marginBottom: 8,
   },
   inputWrapper: {
     flexDirection: "row",
@@ -297,21 +253,5 @@ const styles = StyleSheet.create({
     fontFamily: font.regular,
     textAlign: "center",
     lineHeight: 20,
-  },
-  linkText: {
-    color: color.black,
-    fontFamily: font.medium,
-  },
-  continueButton: {
-    backgroundColor: color.black,
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  continueButtonText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.white,
   },
 });

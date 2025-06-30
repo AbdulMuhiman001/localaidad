@@ -1,4 +1,5 @@
 import Logo from "@/assets/images/Logo.svg";
+import CustomButton from "@/components/customButton";
 import { AppleIcon, EmailIcon, GoogleIcon, PhoneIcon } from "@/utils/SvgIcons";
 import { color, font } from "@/utils/constants";
 import { BlurView } from "expo-blur";
@@ -21,6 +22,8 @@ interface LoginModalProps {
   onClose: () => void;
   onSwitchToCreateAccount: () => void;
   onSwitchToLogin: () => void;
+  handleAppleLogin: () => void;
+  handleGoogleLogin: () => void;
   isLoginMode: boolean;
 }
 
@@ -30,6 +33,8 @@ export default function LoginModal({
   onClose,
   onSwitchToCreateAccount,
   onSwitchToLogin,
+  handleGoogleLogin,
+  handleAppleLogin,
   isLoginMode,
 }: LoginModalProps) {
   return (
@@ -78,60 +83,54 @@ export default function LoginModal({
 
               {/* Login Options */}
               <View style={styles.loginOptionsContainer}>
-                <TouchableOpacity style={styles.loginOption}>
-                  {/* <Text style={styles.appleIcon}>🍎</Text> */}
-                  <AppleIcon />
-                  <Text style={styles.loginOptionText}>
-                    Continue with Apple
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.loginOption}>
-                  {/* <Text style={styles.googleIcon}>G</Text> */}
-                  <GoogleIcon />
-                  <Text style={styles.loginOptionText}>
-                    Continue with Google
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.loginOption}>
-                  {/* <Text style={styles.phoneIcon}>📱</Text> */}
-                  <PhoneIcon />
-                  <Text style={styles.loginOptionText}>
-                    Continue with Phone
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.emailLoginOption}>
-                  {/* <Text style={styles.emailIcon}>✉️</Text> */}
-                  <EmailIcon />
-                  <Text style={styles.emailLoginText}>Continue with Email</Text>
-                </TouchableOpacity>
+                <CustomButton
+                  title="Continue with Apple"
+                  onPress={handleAppleLogin}
+                  variant="secondary"
+                  icon={<AppleIcon />}
+                  iconPosition="left"
+                />
+                <CustomButton
+                  title="Continue with Google"
+                  onPress={handleGoogleLogin}
+                  variant="secondary"
+                  icon={<GoogleIcon />}
+                  iconPosition="left"
+                />
+                <CustomButton
+                  title="Continue with Phone"
+                  onPress={
+                    isLoginMode ? onSwitchToLogin : onSwitchToCreateAccount
+                  }
+                  variant="secondary"
+                  icon={<PhoneIcon />}
+                  iconPosition="left"
+                />
+                <CustomButton
+                  title="Continue with Email"
+                  onPress={
+                    isLoginMode ? onSwitchToLogin : onSwitchToCreateAccount
+                  }
+                  icon={<EmailIcon />}
+                  iconPosition="left"
+                />
               </View>
 
               {/* Switch Account Type */}
-              <View style={styles.createAccountContainer}>
-                <View style={styles.noAccountContainer}>
-                  <View style={styles.line}></View>
-                  <Text style={styles.noAccountText}>
-                    {isLoginMode
-                      ? "DON'T HAVE AN ACCOUNT?"
-                      : "HAVE AN ACCOUNT?"}
-                  </Text>
-                  <View style={styles.line}></View>
-                </View>
-                <TouchableOpacity
-                  style={styles.createAccountModalButton}
-                  onPress={
-                    isLoginMode ? onSwitchToCreateAccount : onSwitchToLogin
-                  }
-                >
-                  <Text style={styles.createAccountModalText}>
-                    {isLoginMode ? "Create account" : "Log in"}
-                  </Text>
-                </TouchableOpacity>
+              <View style={styles.noAccountContainer}>
+                <View style={styles.line}></View>
+                <Text style={styles.noAccountText}>
+                  {isLoginMode ? "DON'T HAVE AN ACCOUNT?" : "HAVE AN ACCOUNT?"}
+                </Text>
+                <View style={styles.line}></View>
               </View>
-
+              <CustomButton
+                title={isLoginMode ? "Create account" : "Log in"}
+                onPress={
+                  isLoginMode ? onSwitchToCreateAccount : onSwitchToLogin
+                }
+                variant="secondary"
+              />
               {/* Terms */}
               <Text style={styles.termsText}>
                 By continuing, you agree to our Terms & Privacy Policy
@@ -157,7 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: color.white,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
-    height: height * 0.95,
+    height: height * 0.96,
   },
   modalHeader: {
     flexDirection: "row",
@@ -189,11 +188,11 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginVertical: 34,
+    marginVertical: 24,
   },
   welcomeBackContainer: {
     alignItems: "center",
-    marginBottom: 28,
+    marginBottom: 24,
   },
   welcomeBackTitle: {
     fontSize: 24,
@@ -201,13 +200,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   welcomeBackSubtitle: {
-    fontSize: 17,
+    fontSize: 16,
     lineHeight: 24,
     color: color.gray400,
     fontFamily: font.regular,
     textAlign: "center",
   },
   loginOptionsContainer: {
+    gap: 16,
     marginBottom: 30,
   },
   loginOption: {
@@ -228,78 +228,23 @@ const styles = StyleSheet.create({
     color: color.black,
     marginLeft: 12,
   },
-  appleIcon: {
-    fontSize: 20,
-  },
-  googleIcon: {
-    fontSize: 16,
-    fontWeight: "bold",
-    backgroundColor: "#4285F4",
-    color: "white",
-    borderRadius: 12,
-    width: 24,
-    height: 24,
-    textAlign: "center",
-    lineHeight: 24,
-  },
-  phoneIcon: {
-    fontSize: 20,
-  },
-  emailLoginOption: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: color.black,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-  },
-  emailLoginText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.white,
-    marginLeft: 12,
-  },
-  emailIcon: {
-    fontSize: 20,
-  },
-  createAccountContainer: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
   noAccountContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 24,
     gap: 10,
   },
   noAccountText: {
     fontSize: 12,
     color: color.gray400,
     fontFamily: font.regular,
-    marginBottom: 16,
     letterSpacing: 0.5,
   },
   line: {
     borderBottomColor: color.gray200,
     borderBottomWidth: 1,
-    marginBottom: 17,
-    width: 80,
-  },
-  createAccountModalButton: {
-    backgroundColor: "transparent",
-    borderWidth: 1,
-    borderColor: color.gray200,
-    borderRadius: 16,
-    paddingVertical: 16,
-    paddingHorizontal: 40,
-    width: "100%",
-  },
-  createAccountModalText: {
-    fontSize: 16,
-    fontFamily: font.semiBold,
-    color: color.black,
-    textAlign: "center",
+    width: 100,
   },
   termsText: {
     fontSize: 14,
@@ -307,5 +252,6 @@ const styles = StyleSheet.create({
     fontFamily: font.regular,
     textAlign: "center",
     lineHeight: 18,
+    marginTop: 24,
   },
 });
