@@ -301,76 +301,78 @@ export default function HomeFeed() {
       {/* Feed */}
       <ScrollView style={styles.feed} showsVerticalScrollIndicator={false}>
         {posts.map((post, i) => (
-          <TouchableOpacity
-            style={styles.postCard}
-            key={i}
-            activeOpacity={0.85}
-            onLongPress={() => openOptions(i)}
-            delayLongPress={500}
-          >
-            {/* Post Header */}
-            <View style={styles.postHeader}>
-              {React.createElement(post.user.avatar, { width: 40, height: 40, style: styles.postAvatar })}
-              <View style={{ marginLeft: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={styles.postName}>{post.user.name}</Text>
-                <Text style={styles.postHandle}>{post.user.handle}</Text>
-                {post.user.verified && <BlueTick width={28} height={28}  />}
-                <Text style={styles.postBadge}>{post.user.badge}</Text>
-              </View>
-              {/* Three-dot button */}
-              <TouchableOpacity onPress={() => {
-                setSelectedPost(i);
-                setReviewModalVisible(true);
-              }} style={{ padding: 8, marginLeft: 8 }}>
-                <Text style={{ fontSize: 22, color: '#888' }}>⋮</Text>
-              </TouchableOpacity>
-            </View>
-            {/* Post Text */}
-            <Text style={styles.postText}>{post.text}</Text>
-            {/* Post Image/Video */}
-            <View style={styles.postMediaContainer}>
-              {React.createElement(post.image, { width: '100%', height: 210, style: styles.postMedia })}
-              {post.video}
-            </View>
-            {/* Post Footer */}
-            <View style={styles.postFooter}>
-              <Text style={styles.postLocation}>{post.location}</Text>
-              <Text style={styles.postTime}>{post.time}</Text>
-            </View>
-            {/* Post Actions */}
-            <View style={styles.postActions}>
-              <View style={styles.actionItem}>
-                <TouchableOpacity onPress={() => handleLike(i)}>
-                  <Reaction1 width={18} height={18} fill={post.liked ? "#47C2FF" : "#fff"} />
+          <React.Fragment key={i}>
+            <TouchableOpacity
+              style={styles.postCard}
+              activeOpacity={0.85}
+              onLongPress={() => openOptions(i)}
+              delayLongPress={500}
+            >
+              {/* Post Header */}
+              <View style={styles.postHeader}>
+                {React.createElement(post.user.avatar, { width: 40, height: 40, style: styles.postAvatar })}
+                <View style={{ marginLeft: 10, flex: 1, flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={styles.postName}>{post.user.name}</Text>
+                  <Text style={styles.postHandle}>{post.user.handle}</Text>
+                  {post.user.verified && <BlueTick width={28} height={28}  />}
+                  <Text style={styles.postBadge}>{post.user.badge}</Text>
+                </View>
+                {/* Three-dot button */}
+                <TouchableOpacity onPress={() => {
+                  setSelectedPost(i);
+                  setReviewModalVisible(true);
+                }} style={{ padding: 8, marginLeft: 8 }}>
+                  <Text style={{ fontSize: 22, color: '#888' }}>⋮</Text>
                 </TouchableOpacity>
-                <SafeText style={styles.actionText}>{post.stats.likes}</SafeText>
               </View>
-              <View style={styles.actionItem}>
-                <TouchableOpacity onPress={() => handleComment(i)}>
-                  <Reaction2 width={18} height={18} fill={post.commented ? "#47C2FF" : "#fff"} />
-                </TouchableOpacity>
-                <SafeText style={styles.actionText}>{post.stats.comments}</SafeText>
+              {/* Post Text */}
+              <Text style={styles.postText}>{post.text}</Text>
+              {/* Post Image/Video */}
+              <View style={styles.postMediaContainer}>
+                {React.createElement(post.image, { width: '100%', height: 210, style: styles.postMedia })}
+                {post.video}
               </View>
-              <View style={styles.actionItem}>
-                <TouchableOpacity onPress={() => handleShare(i)}>
-                  <Reaction3 width={18} height={18} fill={post.shared ? "#fff" : "#fff"} />
-                </TouchableOpacity>
-                <SafeText style={styles.actionText}>{post.stats.shares}</SafeText>
+              {/* Post Footer */}
+              <View style={styles.postFooter}>
+                <Text style={styles.postLocation}>{post.location}</Text>
+                <Text style={styles.postTime}>{post.time}</Text>
               </View>
-              <View style={styles.actionItem}>
-                <TouchableOpacity onPress={() => handleView(i)}>
-                  <Reaction4 width={18} height={18} fill={post.viewed ? "#47C2FF" : "#fff"} />
-                </TouchableOpacity>
-                <SafeText style={styles.actionText}>{post.stats.views}</SafeText>
+              {/* Post Actions */}
+              <View style={styles.postActions}>
+                <View style={styles.actionItem}>
+                  <TouchableOpacity onPress={() => handleLike(i)}>
+                    <Reaction1 width={18} height={18} fill={post.liked ? "#47C2FF" : "#fff"} />
+                  </TouchableOpacity>
+                  <SafeText style={styles.actionText}>{post.stats.likes}</SafeText>
+                </View>
+                <View style={styles.actionItem}>
+                  <TouchableOpacity onPress={() => handleComment(i)}>
+                    <Reaction2 width={18} height={18} fill={post.commented ? "#47C2FF" : "#fff"} />
+                  </TouchableOpacity>
+                  <SafeText style={styles.actionText}>{post.stats.comments}</SafeText>
+                </View>
+                <View style={styles.actionItem}>
+                  <TouchableOpacity onPress={() => handleShare(i)}>
+                    <Reaction3 width={18} height={18} fill={post.shared ? "#fff" : "#fff"} />
+                  </TouchableOpacity>
+                  <SafeText style={styles.actionText}>{post.stats.shares}</SafeText>
+                </View>
+                <View style={styles.actionItem}>
+                  <TouchableOpacity onPress={() => handleView(i)}>
+                    <Reaction4 width={18} height={18} fill={post.viewed ? "#47C2FF" : "#fff"} />
+                  </TouchableOpacity>
+                  <SafeText style={styles.actionText}>{post.stats.views}</SafeText>
+                </View>
+                <View style={styles.actionItem}>
+                  <TouchableOpacity onPress={() => handleDislike(i)}>
+                    <Reaction5 width={18} height={18} fill={post.disliked ? "#47C2FF" : "#fff"} />
+                  </TouchableOpacity>
+                  <SafeText style={styles.actionText}>{post.stats.dislike}</SafeText>
+                </View>
               </View>
-              <View style={styles.actionItem}>
-                <TouchableOpacity onPress={() => handleDislike(i)}>
-                  <Reaction5 width={18} height={18} fill={post.disliked ? "#47C2FF" : "#fff"} />
-                </TouchableOpacity>
-                <SafeText style={styles.actionText}>{post.stats.dislike}</SafeText>
-              </View>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+            {i !== posts.length - 1 && <View style={styles.postDivider} />}
+          </React.Fragment>
         ))}
       </ScrollView>
 
@@ -474,10 +476,15 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   postCard: {
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "#fff",
     borderRadius: 16,
     padding: 12,
     marginBottom: 18,
+  },
+  postDivider: {
+    height: 1,
+    backgroundColor: '#F0F0F0',
+    marginVertical: 4,
   },
   postHeader: {
     flexDirection: "row",
